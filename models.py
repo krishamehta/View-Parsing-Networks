@@ -83,11 +83,8 @@ class VPNModel(nn.Module):
         print(B*N, C, H, W)
         x = x.view(B*N, C, H, W)
         x = self.encoder(x)[0]
-        print("Size after encoder",x.size())
         x = x.view([B, N] + list(x.size()[1:]))
-        print("Size before transform module",x.size())
         x = self.transform_module(x)
-        print("Size after transform module",x.size())
         if return_feat:
             x, feat = self.decoder([x], return_feat=return_feat)
         else:
