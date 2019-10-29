@@ -140,7 +140,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         batch_time.update(time.time() - end)
         end = time.time()
 
-        print("Completed one pass")
+        print("Completed one step of size", step)
 
         if step % args.print_freq == 0:
             output = ('Epoch: [{0}][{1}/{2}], lr: {lr:.5f}\t'
