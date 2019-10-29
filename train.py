@@ -128,7 +128,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         output = output.view(-1, args.num_class)
         loss = criterion(output.float(), target_var.float())
         losses.update(loss.data[0], input_rgb_var.size(0))
-        #prec1, prec5 = accuracy(output.data, target_var.data, topk=(1, 5))
+        prec1, prec5 = accuracy(output.data, target_var.data, topk=(1, 5))
         #top1.update(prec1[0], rgb_stack.size(0))
         #top5.update(prec5[0], rgb_stack.size(0))
 
