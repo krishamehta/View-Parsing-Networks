@@ -193,7 +193,7 @@ class Matterport_Dataset(data.Dataset):
             split_data = cv2.resize(split_data, (self.input_size, self.input_size), interpolation=cv2.INTER_NEAREST)
             print(split_data.shape)
             input_data.extend([split_data])
-        
+        print(input_data.shape)
         image = input_data.copy()
         input_data = self.transform(input_data)
 
