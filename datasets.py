@@ -193,10 +193,8 @@ class Matterport_Dataset(data.Dataset):
             split_data = cv2.resize(split_data, (self.input_size, self.input_size), interpolation=cv2.INTER_NEAREST)
             print(split_data.shape)
             input_data.extend([split_data])
-        print(len(input_data))
         image = input_data.copy()
         input_data = self.transform(input_data)
-        print("Self.transform works fine")
         resized_mask = np.zeros((self.label_size, self.label_size, 41), dtype='uint8')
 
         mask = np.load(self.datadir + 'gt/' + self.split[item] +'.npy').astype('uint8')
@@ -205,6 +203,7 @@ class Matterport_Dataset(data.Dataset):
 
         mask = torch.from_numpy(mask)
 
+        print(input_data.size(), image.size())
         return input_data, mask.long()
 
     def __len__(self):
