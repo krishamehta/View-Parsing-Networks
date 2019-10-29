@@ -77,12 +77,15 @@ class VPNModel(nn.Module):
                 )
 
     def forward(self, x, return_feat=False):
+        print(x.size())
         B, N, C, H, W = x.view([-1, self.num_views, int(x.size()[1] / self.num_views)] \
                             + list(x.size()[2:])).size()
-
+        print(B*N, C, H, W)
         x = x.view(B*N, C, H, W)
         x = self.encoder(x)[0]
+        print(x.size())
         x = x.view([B, N] + list(x.size()[1:]))
+        print(x.size())
         x = self.transform_module(x)
         if return_feat:
             x, feat = self.decoder([x], return_feat=return_feat)
