@@ -142,7 +142,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
 
         print("Completed one step of size", step)
 
-        print(batch_time.val, batch_time.avg, data_time.val, data_time.avg, loss.val, loss.avg)
+        print(batch_time, data_time, loss)
 
         if step % args.print_freq == 0:
             output = ('Epoch: [{0}][{1}/{2}], lr: {lr:.5f}\t'
