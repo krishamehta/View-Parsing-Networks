@@ -196,7 +196,7 @@ class Matterport_Dataset(data.Dataset):
         print(len(input_data))
         image = input_data.copy()
         input_data = self.transform(input_data)
-
+        print("Self.transform works fine")
         resized_mask = np.zeros((self.label_size, self.label_size, 41), dtype='uint8')
 
         mask = np.load(self.datadir + 'gt/' + self.split[item] +'.npy').astype('uint8')
