@@ -126,7 +126,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         output = mapper(input_rgb_var)
         target_var = target_var.view(-1, 41)
         output = output.view(-1, args.num_class)
-        loss = criterion(output.float(), target_var.float())
+        loss = criterion(output.float(), target_var.float()).sum()
         losses.update(loss.data[0], input_rgb_var.size(0))
         #prec1, prec5 = accuracy(output.data, target_var.data, topk=(1, 5))
         #top1.update(prec1[0], rgb_stack.size(0))
@@ -134,23 +134,19 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
 
         optimizer.zero_grad()
 
-        loss.sum().backward()
+        loss.backward()
         optimizer.step()
 
         batch_time.update(time.time() - end)
         end = time.time()
 
-        print("Completed one step of size", step)
-
-        print(batch_time.avg, data_time.avg, losses.avg)
-
         if step % args.print_freq == 0:
             output = ('Epoch: [{0}][{1}/{2}], lr: {lr:.5f}\t'
-                    'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                    'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                    'Loss {loss.val:.4f} ({loss.avg:.4f})\t'.format(
-                        epoch + 1, step + 1, len(train_loader), batch_time=batch_time,
-                        data_time=data_time, loss=losses, lr=optimizer.param_groups[-1]['lr']))
+                    'Time ({batch_time:.3f})\t'
+                    'Data ({data_time:.3f})\t'
+                    'Loss ({loss:.4f})\t'.format(
+                        epoch + 1, step + 1, len(train_loader), batch_time=batch_time.avg,
+                        data_time=data_time.avg, loss=losses.avg, lr=optimizer.param_groups[-1]['lr']))
             print(output)
             log.write(output + '\n')
             log.flush()
