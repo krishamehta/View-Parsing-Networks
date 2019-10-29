@@ -191,6 +191,7 @@ class Matterport_Dataset(data.Dataset):
         for i in range(1,5):
             split_data = cv2.imread(self.datadir + 'images/' + self.split[item] + '_' + str(i) +'.jpg')
             split_data = cv2.resize(split_data, (self.input_size, self.input_size), interpolation=cv2.INTER_NEAREST)
+            print(split_data.shape)
             input_data.extend([split_data])
         
         image = input_data.copy()
