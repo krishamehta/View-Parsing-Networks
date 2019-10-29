@@ -145,8 +145,8 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
                     'Time ({batch_time:.3f})\t'
                     'Data ({data_time:.3f})\t'
                     'Loss ({loss:.4f})\t'.format(
-                        epoch + 1, step + 1, len(train_loader), batch_time=batch_time.avg,
-                        data_time=data_time.avg, loss=losses.avg, lr=optimizer.param_groups[-1]['lr']))
+                        epoch + 1, step + 1, len(train_loader), batch_time=str(batch_time.avg),
+                        data_time=str(data_time.avg), loss=str(losses.avg), lr=optimizer.param_groups[-1]['lr']))
             print(output)
             log.write(output + '\n')
             log.flush()
