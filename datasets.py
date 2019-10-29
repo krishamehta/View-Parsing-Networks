@@ -203,7 +203,7 @@ class Matterport_Dataset(data.Dataset):
 
         mask = torch.from_numpy(mask)
 
-        print(input_data.size(), masl.size())
+        print(input_data.size(), mask.size())
         return input_data, mask.long()
 
     def __len__(self):
