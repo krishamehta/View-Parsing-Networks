@@ -144,7 +144,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
             output = ""
             output += 'Epoch: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(train_loader))
             output += 'lr: ' + str(optimizer.param_groups[-1]['lr']) + '\t'
-            output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + losses.avg
+            output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg)
             print(output)
             log.write(output + '\n')
             log.flush()
