@@ -124,7 +124,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         target_var = target.cuda()
         input_rgb_var = torch.autograd.Variable(rgb_stack).cuda()
         output = mapper(input_rgb_var)
-        target_var = target_var.view(-1)
+        #target_var = target_var.view(-1)
         output = output.view(-1, args.num_class)
         loss = criterion(output, target_var)
         losses.update(loss.data[0], input_rgb_var.size(0))
