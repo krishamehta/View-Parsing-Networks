@@ -200,7 +200,7 @@ class Matterport_Dataset(data.Dataset):
         for i in range(mask.shape[2]):
             resized_mask[:,:,i] = imresize(mask[:,:,i], (self.label_size, self.label_size))
 
-        mask = torch.from_numpy(mask)
+        mask = torch.from_numpy(resized_mask)
 
         print(input_data.size(), mask.size())
         return input_data, mask.long()
