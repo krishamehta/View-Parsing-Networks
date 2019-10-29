@@ -140,6 +140,11 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         batch_time.update(time.time() - end)
         end = time.time()
 
+        print('Epoch: [{0}][{1}/{2}]'.format(epoch + 1, step + 1, len(train_loader)))
+        print('lr: ', optimizer.param_groups[-1]['lr'])
+        print(data_time.avg, batch_time.avg, losses.avg)
+
+        """
         if step % args.print_freq == 0:
             output = ('Epoch: [{0}][{1}/{2}], lr: {lr:.5f}\t'
                     'Time ({batch_time:.3f})\t'
@@ -150,6 +155,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
             print(output)
             log.write(output + '\n')
             log.flush()
+        """
 
 def eval(val_loader, mapper, criterion, log, epoch):
     batch_time = AverageMeter()
