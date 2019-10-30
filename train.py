@@ -125,7 +125,6 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         input_rgb_var = torch.autograd.Variable(rgb_stack).cuda()
         output = mapper(input_rgb_var) # Shape (batch_size, label_size, label_size, num class)
         loss = criterion(output.view(-1).float(), target_var.view(-1).float())
-        print(loss.size())
         losses.update(loss.data[0], input_rgb_var.size(0))
         iou = calculate_iou(output, target_var)
 
@@ -254,8 +253,8 @@ def accuracy(output, target, topk=(1,)):
 
 def calculate_iou(outputs: torch.Tensor, labels: torch.Tensor):
     
-    labels = labels.float()
-    outputs = outputs.round()
+    labels = labels.int()
+    outputs = outputs.round().int()
     intersection = (outputs & labels).float().sum()  # Will be zero if Truth=0 or Prediction=0
     union = (outputs | labels).float().sum()         # Will be zzero if both are 0
     
