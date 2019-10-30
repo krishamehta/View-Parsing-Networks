@@ -258,7 +258,7 @@ def calculate_iou(outputs: torch.Tensor, labels: torch.Tensor):
     labels = labels.int()
     outputs = outputs.round().int()
     intersection = (1 - (outputs ^ labels)).float().sum()  # Will be zero if Truth=0 or Prediction=0
-    union = (outputs ^ labels).float().sum()         # Will be zzero if both are 0
+    union = (outputs | labels).float().sum()         # Will be zzero if both are 0
     
     iou = (intersection + SMOOTH) / (union + SMOOTH)  # We smooth our devision to avoid 0/0
         
