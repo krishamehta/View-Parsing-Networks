@@ -132,7 +132,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
 
         optimizer.zero_grad()
 
-        loss..backward()
+        loss.backward()
         optimizer.step()
 
         batch_time.update(time.time() - end)
