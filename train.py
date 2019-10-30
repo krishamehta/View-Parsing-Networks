@@ -257,7 +257,7 @@ def calculate_iou(outputs: torch.Tensor, labels: torch.Tensor):
 
     labels = labels.int()
     outputs = outputs.round().int()
-    intersection = (outputs & (outputs ^ labels)).float().sum()
+    intersection = (outputs & labels).float().sum()
     union = (outputs | labels).float().sum()
     print(intersection, union)
     
