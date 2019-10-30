@@ -132,7 +132,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
 
         optimizer.zero_grad()
 
-        loss.backward()
+        loss.sum().backward()
         optimizer.step()
 
         batch_time.update(time.time() - end)
@@ -253,7 +253,7 @@ def accuracy(output, target, topk=(1,)):
 
 def calculate_iou(outputs: torch.Tensor, labels: torch.Tensor):
     
-    SMOOTH = 1e-6
+    SMOOTH = 1e-4
 
     labels = labels.int()
     outputs = outputs.round().int()
