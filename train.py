@@ -124,6 +124,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         target_var = target.cuda()
         input_rgb_var = torch.autograd.Variable(rgb_stack).cuda()
         output = mapper(input_rgb_var)
+        print(output.size())
         target_var = target_var.view(-1, 41)
         output = output.view(-1, args.num_class)
         loss = criterion(output.float(), target_var.float())
@@ -141,8 +142,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         end = time.time()
 
         if step % args.print_freq == 0:
-            output = ""
-            output += 'Epoch: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(train_loader))
+            output = 'Epoch: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(train_loader))
             output += 'lr: ' + str(optimizer.param_groups[-1]['lr']) + '\t'
             output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg)
             print(output)
@@ -178,28 +178,25 @@ def eval(val_loader, mapper, criterion, log, epoch):
             input_rgb_var = torch.autograd.Variable(rgb_stack).cuda()
             output = mapper(input_rgb_var)
         target_var = target.cuda()
-        target_var = target_var.view(-1)
+        target_var = target_var.view(-1, 41)
         output = output.view(-1, args.num_class)
-        loss = criterion(output, target_var)
+        loss = criterion(output.float(), target_var.float())
         losses.update(loss.data[0], input_rgb_var.size(0))
-        prec1, prec5 = accuracy(output.data, target_var.data, topk=(1, 5))
-        top1.update(prec1[0], rgb_stack.size(0))
-        top5.update(prec5[0], rgb_stack.size(0))
+        #prec1, prec5 = accuracy(output.data, target_var.data, topk=(1, 5))
+        #top1.update(prec1[0], rgb_stack.size(0))
+        #top5.update(prec5[0], rgb_stack.size(0))
 
         batch_time.update(time.time() - end)
         end = time.time()
 
         if step % args.print_freq == 0:
-            output = ('Test: [{0}][{1}/{2}]\t'
-                    'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                    'Data {data_time.val:.3f} ({data_time.avg:.3f})\t'
-                    'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-                    'Prec@1 {top1.val:.3f} ({top1.avg:.3f})'.format(
-                epoch + 1, step + 1, len(val_loader), batch_time=batch_time,
-                data_time=data_time, loss=losses, top1=top1))
+            output = 'Test: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(train_loader))
+            output += 'lr: ' + str(optimizer.param_groups[-1]['lr']) + '\t'
+            output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg)
             print(output)
             log.write(output + '\n')
             log.flush()
+    """
     output = ('Testing Results: Prec@1 {top1.avg:.3f} Loss {loss.avg:.5f}'
               .format(top1=top1, loss=losses))
     print(output)
@@ -207,6 +204,7 @@ def eval(val_loader, mapper, criterion, log, epoch):
     print(output_best)
     log.write(output + ' ' + output_best + '\n')
     log.flush()
+    """
     return top1.avg
 
 def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
