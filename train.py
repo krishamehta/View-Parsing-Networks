@@ -132,7 +132,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
 
         optimizer.zero_grad()
 
-        loss.sum().backward()
+        loss..backward()
         optimizer.step()
 
         batch_time.update(time.time() - end)
@@ -257,8 +257,9 @@ def calculate_iou(outputs: torch.Tensor, labels: torch.Tensor):
 
     labels = labels.int()
     outputs = outputs.round().int()
-    intersection = (outputs ^ labels).float().sum()  # Will be zero if Truth=0 or Prediction=0
-    union = (outputs | labels).float().sum()         # Will be zzero if both are 0
+    intersection = (outputs ^ labels).float().sum()
+    union = (outputs | labels).float().sum()
+    print(intersection, union)
     
     iou = (intersection + SMOOTH) / (union + SMOOTH)  # We smooth our devision to avoid 0/0
         
