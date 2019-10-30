@@ -127,9 +127,9 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         loss = criterion(output.view(-1).float(), target_var.view(-1).float())
         print(loss.size())
         losses.update(loss.data[0], input_rgb_var.size(0))
-        #prec1, prec5 = accuracy(output.data, target_var.data, topk=(1, 5))
-        #top1.update(prec1[0], rgb_stack.size(0))
-        #top5.update(prec5[0], rgb_stack.size(0))
+        iou = calculate_iou(output, target_var)
+
+        print("IOU: ",iou)
 
         optimizer.zero_grad()
 
@@ -251,6 +251,16 @@ def accuracy(output, target, topk=(1,)):
         correct_k = correct[:k].view(-1).float().sum(0)
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
+
+def calculate_iou(outputs: torch.Tensor, labels: torch.Tensor):
+    
+    outputs = outputs.round()
+    intersection = (outputs & labels).float().sum()  # Will be zero if Truth=0 or Prediction=0
+    union = (outputs | labels).float().sum()         # Will be zzero if both are 0
+    
+    iou = (intersection + SMOOTH) / (union + SMOOTH)  # We smooth our devision to avoid 0/0
+        
+    return iou
 
 if __name__=='__main__':
     main()
