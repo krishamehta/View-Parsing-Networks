@@ -254,6 +254,7 @@ def accuracy(output, target, topk=(1,)):
 
 def calculate_iou(outputs: torch.Tensor, labels: torch.Tensor):
     
+    labels = labels.float()
     outputs = outputs.round()
     intersection = (outputs & labels).float().sum()  # Will be zero if Truth=0 or Prediction=0
     union = (outputs | labels).float().sum()         # Will be zzero if both are 0
