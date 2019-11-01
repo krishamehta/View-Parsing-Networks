@@ -177,6 +177,7 @@ def eval(val_loader, mapper, criterion, log, epoch):
             print(output)
             log.write(output + '\n')
             log.flush()
+            return mean_iou.avg.item()
 
     return mean_iou.avg.item()
 
