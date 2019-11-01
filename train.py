@@ -84,7 +84,7 @@ def main():
             print(("=> no checkpoint found at '{}'".format(args.resume)))
 
 
-    criterion = nn.BCEWithLogitsLoss(reduction='none')
+    criterion = nn.BCELoss(reduction='none')
     optimizer = optim.Adam(mapper.parameters(),
                           lr=args.start_lr, betas=(0.95, 0.999))
 

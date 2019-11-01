@@ -73,7 +73,7 @@ class VPNModel(nn.Module):
                     arch=config.decoder,
                     fc_dim=config.fc_dim,
                     num_class=config.num_class,
-                    use_softmax=False,
+                    use_softmax=True,
                 )
 
     def forward(self, x, return_feat=False):
