@@ -144,6 +144,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
             print(output)
             log.write(output + '\n')
             log.flush()
+            return
 
 def eval(val_loader, mapper, criterion, log, epoch):
     batch_time = AverageMeter()
