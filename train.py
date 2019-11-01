@@ -171,7 +171,7 @@ def eval(val_loader, mapper, criterion, log, epoch):
         end = time.time()
 
         if step % args.print_freq == 0:
-            output = 'Test: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(train_loader))
+            output = 'Test: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(val_loader))
             output += 'lr: ' + str(optimizer.param_groups[-1]['lr']) + '\t'
             output += 'Mean IOU: ' + str(mean_iou.avg) + '\t'
             output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg)
