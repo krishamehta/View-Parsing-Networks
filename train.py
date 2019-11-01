@@ -118,7 +118,6 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
     end = time.time()
     for step, data in enumerate(train_loader):
         rgb_stack, target = data
-        print("loaded data")
         data_time.update(time.time() - end)
         target_var = target.cuda()
         input_rgb_var = torch.autograd.Variable(rgb_stack).cuda()
