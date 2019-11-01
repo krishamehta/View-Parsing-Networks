@@ -139,7 +139,8 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
             output = 'Epoch: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(train_loader))
             output += 'lr: ' + str(optimizer.param_groups[-1]['lr']) + '\t'
             output += 'Mean IOU: ' + str(mean_iou.avg.item()) + '\t'
-            output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg.item())
+            output += 'Mean Loss: ' + str(losses.avg.item()) + '\t'
+            output += 'Data Time: '+ str(data_time.avg) + '\t' + 'Batch Time: '+str(batch_time.avg)
             print(output)
             log.write(output + '\n')
             log.flush()
@@ -173,7 +174,8 @@ def eval(val_loader, mapper, criterion, log, epoch):
             output = 'Test: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(val_loader))
             output += 'lr: ' + str(optimizer.param_groups[-1]['lr']) + '\t'
             output += 'Mean IOU: ' + str(mean_iou.avg.item()) + '\t'
-            output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg.item())
+            output += 'Mean Loss: ' + str(losses.avg.item()) + '\t'
+            output += 'Data Time: '+ str(data_time.avg) + '\t' + 'Batch Time: '+str(batch_time.avg)
             print(output)
             log.write(output + '\n')
             log.flush()
