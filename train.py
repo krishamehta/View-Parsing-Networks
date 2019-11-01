@@ -138,8 +138,8 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         if step % args.print_freq == 0:
             output = 'Epoch: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(train_loader))
             output += 'lr: ' + str(optimizer.param_groups[-1]['lr']) + '\t'
-            output += 'Mean IOU: ' + str(mean_iou.avg.data[0]) + '\t'
-            output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg.data[0])
+            output += 'Mean IOU: ' + str(mean_iou.avg.item()) + '\t'
+            output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg.item())
             print(output)
             log.write(output + '\n')
             log.flush()
@@ -172,8 +172,8 @@ def eval(val_loader, mapper, criterion, log, epoch):
         if step % args.print_freq == 0:
             output = 'Test: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(val_loader))
             output += 'lr: ' + str(optimizer.param_groups[-1]['lr']) + '\t'
-            output += 'Mean IOU: ' + str(mean_iou.avg.data[0]) + '\t'
-            output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg.data[0])
+            output += 'Mean IOU: ' + str(mean_iou.avg.item()) + '\t'
+            output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg.item())
             print(output)
             log.write(output + '\n')
             log.flush()
