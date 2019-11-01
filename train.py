@@ -161,9 +161,7 @@ def eval(val_loader, mapper, criterion, log, epoch):
             input_rgb_var = torch.autograd.Variable(rgb_stack).cuda()
             output = mapper(input_rgb_var)
         target_var = target.cuda()
-        target_var = target_var.view(-1, 41)
-        output = output.view(-1, args.num_class)
-        loss = criterion(output.float(), target_var.float())
+        loss = criterion(output.view(-1).float(), target_var.view(-1).float())
         losses.update(loss.data[0], input_rgb_var.size(0))
         iou = calculate_iou(output, target_var)
         mean_iou.update(iou, rgb_stack.size(0))
@@ -180,7 +178,7 @@ def eval(val_loader, mapper, criterion, log, epoch):
             log.write(output + '\n')
             log.flush()
 
-    return mean_iou.avg
+    return mean_iou.avg.item()
 
 def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
     torch.save(state, '%s/%s_checkpoint.pth.tar' % (args.root_model, args.store_name))
