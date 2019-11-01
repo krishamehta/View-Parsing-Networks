@@ -413,7 +413,7 @@ class PPMBilinear(nn.Module):
             nn.Conv2d(512, num_class, kernel_size=1)
         )
 
-    def forward(self, conv_out, segSize=None, return_feat=False):
+    def forward(self, conv_out, segSize=25, return_feat=False):
         conv5 = conv_out[-1]
 
         input_size = conv5.size()
