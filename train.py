@@ -104,15 +104,14 @@ def main():
                 'epoch': epoch + 1,
                 'arch': network_config.encoder,
                 'state_dict': mapper.state_dict(),
-                'best_prec1': best_prec1,
+                'best_IOU': best_prec1,
             }, is_best)
 
 def train(train_loader, mapper, criterion, optimizer, epoch, log):
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()
-    top1 = AverageMeter()
-    top5 = AverageMeter()
+    mean_iou = AverageMeter()
 
     mapper.train()
 
@@ -127,8 +126,7 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         loss = criterion(output.view(-1).float(), target_var.view(-1).float())
         losses.update(loss.data[0], input_rgb_var.size(0))
         iou = calculate_iou(output, target_var)
-
-        print("IOU: ",iou)
+        mean_iou.update(iou, rgb_stack.size(0))
 
         optimizer.zero_grad()
 
@@ -141,30 +139,17 @@ def train(train_loader, mapper, criterion, optimizer, epoch, log):
         if step % args.print_freq == 0:
             output = 'Epoch: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(train_loader))
             output += 'lr: ' + str(optimizer.param_groups[-1]['lr']) + '\t'
+            output += 'Mean IOU: ' + str(mean_iou.avg) + '\t'
             output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg)
             print(output)
             log.write(output + '\n')
             log.flush()
 
-        """
-        if step % args.print_freq == 0:
-            output = ('Epoch: [{0}][{1}/{2}], lr: {lr:.5f}\t'
-                    'Time ({batch_time:.3f})\t'
-                    'Data ({data_time:.3f})\t'
-                    'Loss ({loss:.4f})\t'.format(
-                        epoch + 1, step + 1, len(train_loader), batch_time=str(batch_time.avg),
-                        data_time=str(data_time.avg), loss=str(losses.avg), lr=optimizer.param_groups[-1]['lr']))
-            print(output)
-            log.write(output + '\n')
-            log.flush()
-        """
-
 def eval(val_loader, mapper, criterion, log, epoch):
     batch_time = AverageMeter()
     data_time = AverageMeter()
     losses = AverageMeter()
-    top1 = AverageMeter()
-    top5 = AverageMeter()
+    iou = AverageMeter()
 
     mapper.eval()
 
@@ -179,9 +164,8 @@ def eval(val_loader, mapper, criterion, log, epoch):
         output = output.view(-1, args.num_class)
         loss = criterion(output.float(), target_var.float())
         losses.update(loss.data[0], input_rgb_var.size(0))
-        #prec1, prec5 = accuracy(output.data, target_var.data, topk=(1, 5))
-        #top1.update(prec1[0], rgb_stack.size(0))
-        #top5.update(prec5[0], rgb_stack.size(0))
+        iou = calculate_iou(output, target_var)
+        mean_iou.update(iou, rgb_stack.size(0))
 
         batch_time.update(time.time() - end)
         end = time.time()
@@ -189,20 +173,13 @@ def eval(val_loader, mapper, criterion, log, epoch):
         if step % args.print_freq == 0:
             output = 'Test: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(train_loader))
             output += 'lr: ' + str(optimizer.param_groups[-1]['lr']) + '\t'
+            output += 'Mean IOU: ' + str(mean_iou.avg) + '\t'
             output += str(data_time.avg) + '\t' + str(batch_time.avg) + '\t' + str(losses.avg)
             print(output)
             log.write(output + '\n')
             log.flush()
-    """
-    output = ('Testing Results: Prec@1 {top1.avg:.3f} Loss {loss.avg:.5f}'
-              .format(top1=top1, loss=losses))
-    print(output)
-    output_best = '\nBest Prec@1: %.3f' % (best_prec1)
-    print(output_best)
-    log.write(output + ' ' + output_best + '\n')
-    log.flush()
-    """
-    return top1.avg
+
+    return mean_iou.avg
 
 def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
     torch.save(state, '%s/%s_checkpoint.pth.tar' % (args.root_model, args.store_name))
@@ -259,8 +236,6 @@ def calculate_iou(outputs: torch.Tensor, labels: torch.Tensor):
     outputs = outputs.round().int()
     intersection = (outputs & labels).float().sum()
     union = (outputs | labels).float().sum()
-    print(labels.unique(), outputs.unique())
-    print(intersection, union)
     
     iou = (intersection + SMOOTH) / (union + SMOOTH)  # We smooth our devision to avoid 0/0
         
