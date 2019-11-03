@@ -21,6 +21,7 @@ with open(points_filepath) as f:
     for line in f:
         points.append(line[:-1])
 
+random.seed(1)
 random.shuffle(points)
 
 def main():
