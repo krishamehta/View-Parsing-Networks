@@ -171,7 +171,6 @@ def eval(val_loader, mapper, criterion, log, epoch):
 
         if step % args.print_freq == 0:
             output = 'Epoch: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(val_loader))
-            output += 'lr: {0:.5f}\t'.format(optimizer.param_groups[-1]['lr']) + '\t'
             output += 'Mean IOU: {0:.4f}\tBatch IOU: {1:.4f}\t'.format(mean_iou.avg.item(), iou.item())
             output += 'Mean Loss: {0:.4f}\tBatch Loss: {1:.4f}\t'.format(losses.avg.item(), loss.data[0].item())
             output += 'Data Time: {0:.3f}\t Batch Time: {1:.3f}'.format(data_time.avg, batch_time.avg)
