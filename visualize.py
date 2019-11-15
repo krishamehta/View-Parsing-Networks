@@ -130,18 +130,18 @@ def eval(val_loader, mapper, criterion, log, epoch):
 
         for i in range(41):
             gt = target[0,:,:,i]
-            pred = torch.round(output.cpu()[0,:,:,i])
+            pred = output.cpu()[0,:,:,i]
             images = [ gt, pred]
-            titles = []
+            titles = []"""
             if gt.all(1): titles.append("GroundTruth All 1")
             else: titles.append("GroundTruth")
             if pred.all(1) : titles.append("Prediction All 1")
-            else: titles.append("Prediction")
+            else: titles.append("Prediction")"""
 
             fig = plt.figure()
             for j in range(2):
                 ax = fig.add_subplot(1,2,j+1)
-                ax.imshow(images[j], origin='lower' , cmap='binary')
+                ax.imshow(images[j], origin='lower' , cmap='gray')
                 ax.set_title(titles[j]), ax.set_xticks(()), ax.set_yticks(())
             fig.tight_layout()
             fig.savefig('visualize/'+str(step)+'_' +str(i) +'.jpg', bbox_inches='tight')
