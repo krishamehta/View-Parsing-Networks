@@ -129,13 +129,13 @@ def eval(val_loader, mapper, criterion, log, epoch):
         
 
         for i in range(41):
-            gt = target[0,:,:,i].numpy()
-            pred = torch.round(output.cpu()[0,:,:,i]).numpy()
+            gt = target[0,:,:,i]
+            pred = torch.round(output.cpu()[0,:,:,i])
             images = [ gt, pred]
             titles = []
-            if np.all(gt): titles.append("GroundTruth All 1")
+            if gt.all(1): titles.append("GroundTruth All 1")
             else: titles.append("GroundTruth")
-            if np.all(pred) : titles.append("Prediction All 1")
+            if pred.all(1) : titles.append("Prediction All 1")
             else: titles.append("Prediction")
 
             fig = plt.figure()
