@@ -99,47 +99,8 @@ def main():
     log_train = open(os.path.join(args.log_root, '%s.csv' % args.store_name), 'w')
 
     
-    eval(val_loader, mapper, criterion, log_train, epoch)
+    eval(val_loader, mapper, criterion, log_train, 1)
 
-"""
-def train(train_loader, mapper, criterion, optimizer, epoch, log):
-    batch_time = AverageMeter()
-    data_time = AverageMeter()
-    losses = AverageMeter()
-    mean_iou = AverageMeter()
-
-    mapper.train()
-
-    end = time.time()
-    for step, data in enumerate(train_loader):
-        rgb_stack, target = data
-        data_time.update(time.time() - end)
-        target_var = target.cuda()
-        input_rgb_var = torch.autograd.Variable(rgb_stack).cuda()
-        output = mapper(input_rgb_var) # Shape (batch_size, label_size, label_size, num class)
-        loss = criterion(output.view(-1).float(), target_var.view(-1).float())
-        losses.update(loss.data[0], input_rgb_var.size(0))
-        iou = calculate_iou(output, target_var)
-        mean_iou.update(iou, rgb_stack.size(0))
-
-        optimizer.zero_grad()
-
-        loss.sum().backward()
-        optimizer.step()
-
-        batch_time.update(time.time() - end)
-        end = time.time()
-
-        if step % args.print_freq == 0:
-            output = 'Epoch: [{0}][{1}/{2}]\t'.format(epoch + 1, step + 1, len(train_loader))
-            output += 'lr: {0:.5f}\t'.format(optimizer.param_groups[-1]['lr']) + '\t'
-            output += 'Mean IOU: {0:.4f}\tBatch IOU: {1:.4f}\t'.format(mean_iou.avg.item(), iou.item())
-            output += 'Mean Loss: {0:.4f}\tBatch Loss: {1:.4f}\t'.format(losses.avg.item(), loss.data[0].item())
-            output += 'Data Time: {0:.3f}\t Batch Time: {1:.3f}'.format(data_time.avg, batch_time.avg)
-            print(output)
-            log.write(output + '\n')
-            log.flush()
-    """
 def eval(val_loader, mapper, criterion, log, epoch):
     batch_time = AverageMeter()
     data_time = AverageMeter()
