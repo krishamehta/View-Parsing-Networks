@@ -128,7 +128,7 @@ def eval(val_loader, mapper, criterion, log, epoch):
         #Visualizations
         
         for i in range(41):
-            images = [target[0,i,:,:], output.cpu()[0,i,:,:]]
+            images = [target[i,:,:], output.cpu()[i,:,:]]
             titles = ["GroundTruth", "Prediction"]
             fig = plt.figure()
             for i in range(2):
