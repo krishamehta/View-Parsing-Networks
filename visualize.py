@@ -126,9 +126,17 @@ def eval(val_loader, mapper, criterion, log, epoch):
 
         #Visualizations
         
+        gt = target[0,:,:,i].numpy()
+        pred = torch.round(output.cpu()[0,:,:,i]).numpy()
+
         for i in range(41):
-            images = [target[0,:,:,i], output.cpu()[0,:,:,i]]
-            titles = ["GroundTruth", "Prediction"]
+            images = [ gt, pred]
+            titles = []
+            if np.all(gt): titles.append("GroundTruth All 1")
+            else: titles.append("GroundTruth")
+            if np.all(pred) : titles.append("Prediction All 1")
+            else: titles.append("Prediction")
+
             fig = plt.figure()
             for j in range(2):
                 ax = fig.add_subplot(1,2,j+1)
