@@ -126,10 +126,11 @@ def eval(val_loader, mapper, criterion, log, epoch):
 
         #Visualizations
         
-        gt = target[0,:,:,i].numpy()
-        pred = torch.round(output.cpu()[0,:,:,i]).numpy()
+        
 
         for i in range(41):
+            gt = target[0,:,:,i].numpy()
+            pred = torch.round(output.cpu()[0,:,:,i]).numpy()
             images = [ gt, pred]
             titles = []
             if np.all(gt): titles.append("GroundTruth All 1")
