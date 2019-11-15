@@ -132,13 +132,7 @@ def eval(val_loader, mapper, criterion, log, epoch):
             gt = target[0,:,:,i]
             pred = output.cpu()[0,:,:,i]
             images = [ gt, pred]
-            titles = []
-            """
-            if gt.all(1): titles.append("GroundTruth All 1")
-            else: titles.append("GroundTruth")
-            if pred.all(1) : titles.append("Prediction All 1")
-            else: titles.append("Prediction")
-            """
+            titles = ['Ground Truth', 'Prediction']
 
             fig = plt.figure()
             for j in range(2):
