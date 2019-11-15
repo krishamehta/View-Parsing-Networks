@@ -132,7 +132,7 @@ def eval(val_loader, mapper, criterion, log, epoch):
             fig = plt.figure()
             for i in range(2):
                 ax = fig.add_subplot(1,2,i+1)
-                ax.imshow(images[i], origin='lower , cmap='binary')
+                ax.imshow(images[i], origin='lower' , cmap='binary')
                 ax.set_title(titles[i]), ax.set_xticks(()), ax.set_yticks(())
             fig.tight_layout()
             fig.savefig('visualize/'+str(step)+'_' +str(i) +'.jpg', bbox_inches='tight')
