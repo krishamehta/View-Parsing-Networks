@@ -116,7 +116,6 @@ def eval(val_loader, mapper, criterion, log, epoch):
         with torch.no_grad():
             input_rgb_var = torch.autograd.Variable(rgb_stack).cuda()
             output = mapper(input_rgb_var)
-            print(type(output))
         target_var = target.cuda()
         loss = criterion(output.view(-1).float(), target_var.view(-1).float())
         losses.update(loss.data[0], input_rgb_var.size(0))
@@ -133,8 +132,8 @@ def eval(val_loader, mapper, criterion, log, epoch):
             fig = plt.figure()
             for i in range(2):
                 ax = fig.add_subplot(1,2,i+1)
-                ax.imshow(images[i],'gray')
-                ax.set_title(titles[0]), ax.set_xticks(()), ax.set_yticks(())
+                ax.imshow(images[i], origin='lower , cmap='binary')
+                ax.set_title(titles[i]), ax.set_xticks(()), ax.set_yticks(())
             fig.tight_layout()
             fig.savefig('visualize/'+str(step)+'_' +str(i) +'.jpg', bbox_inches='tight')
             plt.close(fig)
