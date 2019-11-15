@@ -99,20 +99,7 @@ def main():
     log_train = open(os.path.join(args.log_root, '%s.csv' % args.store_name), 'w')
 
     
-    for epoch in range(args.start_epoch, args.epochs):
-        adjust_learning_rate(optimizer, epoch, args.lr_steps)
-        #train(train_loader, mapper, criterion, optimizer, epoch, log_train)
-
-        if (epoch + 1) % args.ckpt_freq == 0 or epoch == args.epochs - 1:
-            prec1 = eval(val_loader, mapper, criterion, log_train, epoch)
-            is_best = prec1 > best_prec1
-            best_prec1 = max(prec1, best_prec1)
-            save_checkpoint({
-                'epoch': epoch + 1,
-                'arch': network_config.encoder,
-                'state_dict': mapper.state_dict(),
-                'best_IOU': best_prec1,
-            }, is_best)
+    eval(val_loader, mapper, criterion, log_train, epoch)
 
 """
 def train(train_loader, mapper, criterion, optimizer, epoch, log):
@@ -177,17 +164,18 @@ def eval(val_loader, mapper, criterion, log, epoch):
         end = time.time()
 
         #Visualizations
-        """
-        titles = ["GroundTruth", "Prediction"]
-        fig = plt.figure()
-        for i in range(2):
-            ax = fig.add_subplot(1,2,i+1)
-            ax.imshow(images[i],'gray')
-            ax.set_title(titles[0]), ax.set_xticks(()), ax.set_yticks(())
-        fig.tight_layout()
-        fig.savefig('data/visual/'+img_name +'.jpg', bbox_inches='tight')
-        plt.close(fig)
-        """
+        
+        for i in range(41):
+            images = [target[0,i,:,:], output.cpu()[0,i,:,:]]
+            titles = ["GroundTruth", "Prediction"]
+            fig = plt.figure()
+            for i in range(2):
+                ax = fig.add_subplot(1,2,i+1)
+                ax.imshow(images[i],'gray')
+                ax.set_title(titles[0]), ax.set_xticks(()), ax.set_yticks(())
+            fig.tight_layout()
+            fig.savefig('visualize/'+str(step)+'_' +str(i) +'.jpg', bbox_inches='tight')
+            plt.close(fig)
 
         
         if step % args.print_freq == 0:
